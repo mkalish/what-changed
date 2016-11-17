@@ -1,0 +1,36 @@
+{
+  "name": "what-changed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkalish/what-changed.git"
+  },
+  "author": "mkalish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mkalish/what-changed/issues"
+  },
+  "homepage": "https://github.com/mkalish/what-changed#readme",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "express": "^4.14.0",
+    "express-graphql": "^0.6.1",
+    "express-session": "^1.14.2",
+    "github": "^6.0.4",
+    "github-api": "^2.3.0",
+    "graphql": "^0.8.2",
+    "mongoose": "^4.6.8"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.48",
+    "nodemon": "^1.11.0",
+    "ts-node": "^1.7.0",
+    "typescript": "^2.0.10"
+  }
+}
