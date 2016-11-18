@@ -2,57 +2,142 @@ import * as express from 'express';
 import * as session from 'express-session';
 import * as graphqlHTTP from 'express-graphql';
 import * as mongoose from 'mongoose';
-import { GraphQLSchema, GraphQLObjectType, GraphQLString } from 'graphql';
-const GitHubApi = require('github');
+import * as bluebird from 'bluebird';
+import {
+    GraphQLSchema,
+    GraphQLObjectType, 
+    GraphQLString, 
+    GraphQLBoolean, 
+    GraphQLNullableType, 
+    GraphQLInputObjectType,
+    GraphQLList
+} from 'graphql';
+import UserService from './src/service/user-service';
+import RepoService from './src/service/repo-service';
 
-const githubApiToken = '5c2397ab5bd2184a0b4667ae8928ecb63543cb31';
 
 
-
-const github = new GitHubApi({});
-github.authenticate({
-    type: 'token',
-    token: githubApiToken
-});
 
 mongoose.connect('mongodb://localhost/what-changed');
+(<any>mongoose).Promise = bluebird
 
 const app = express();
 
-
-const test = new GraphQLObjectType({
-    name: 'test',
+const RepoType = new GraphQLObjectType({
+    name: 'repo',
     fields: {
-        id: {
+        title: {
             type: GraphQLString
+        },
+        url: {
+            type: GraphQLString
+        },
+        tags: {
+            type: new GraphQLList(GraphQLString)
+        },
+        useDefault: {
+            type: GraphQLBoolean
+        },
+        alternativeChangelog: {
+            type: GraphQLString
+        },
+        changelog: {
+            type: GraphQLString,
+            resolve: (value) => {
+                return RepoService.getChangeLog(value)
+            }
         }
     }
-})
+});
 
-const schema = new GraphQLSchema({
-    query: new GraphQLObjectType({
-        name: 'RootQuery',
-        fields: {
-            test: {
-                type: test,
-                resolve: function() {
-                    return {
-                        id: '123'
-                    };
-                }
+const UserType = new GraphQLObjectType({
+    name: 'user',
+    fields: {
+        username: {
+            type: GraphQLString
+        },
+        useStarredRepo: {
+            type: GraphQLBoolean
+        },
+        email: {
+            type: GraphQLString
+        },
+        created: {
+            type: GraphQLString
+        },
+        updated: {
+            type: GraphQLString
+        },
+        repos: {
+            type: new GraphQLList(RepoType)
+        }
+    }
+});
+
+
+
+const UserInputType = new GraphQLInputObjectType({
+    name: 'UserInput',
+    fields: () => ({
+        username: {
+            type: GraphQLString,
+        },
+        useStarredRepo: {
+            type: GraphQLBoolean
+        },
+        email: {
+            type: GraphQLString
+        },
+        created: {
+            type: GraphQLString
+        },
+        updated: {
+            type: GraphQLString
+        }
+    })
+});
+
+const MutationType = new GraphQLObjectType({
+    name: 'mutations',
+    description: 'What Change Mutations',
+    fields: () => ({
+        createUser: {
+            type: UserType,
+            description: 'Create a new user',
+            args: {
+                user: { type: UserInputType }
+            },
+            resolve: (value, {user}) => {
+                return UserService
+                    .createUser(user.username);
             }
         }
     })
 });
 
-app.use(session({secret: 'what-changed', cookie: {maxAge: 6000}}));
-
-
-app.get('/', function (req, res) {
-    github.activity.getStarredRepos({ per_page: 100}, function(err, data) {
-        res.json(data);
-    });
+const schema = new GraphQLSchema({
+    query: new GraphQLObjectType({
+        name: 'RootQuery',
+        fields: {
+            users: {
+                type: new GraphQLList(UserType),
+                resolve: function() {
+                    return UserService.findUsers();
+                }
+            }
+        }
+    }),
+    mutation: MutationType
 });
+
+app.use(session({ secret: 'what-changed', cookie: { maxAge: 6000 } }));
+
+
+// app.get('/', function (req, res) {
+//     github.activity.getStarredRepos({ per_page: 100 }, function (err, data) {
+//         res.json(data);
+//     });
+// });
 
 app.use('/graphql', graphqlHTTP({
     graphiql: true,

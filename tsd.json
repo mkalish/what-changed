@@ -6,19 +6,37 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "express/express.d.ts": {
-      "commit": "8797f321463dcf5f048d87ac2f7bf9ade113b911"
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "8797f321463dcf5f048d87ac2f7bf9ade113b911"
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
     },
     "express-serve-static-core/express-serve-static-core.d.ts": {
-      "commit": "8797f321463dcf5f048d87ac2f7bf9ade113b911"
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
     },
     "mime/mime.d.ts": {
-      "commit": "8797f321463dcf5f048d87ac2f7bf9ade113b911"
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
     },
     "node/node.d.ts": {
-      "commit": "8797f321463dcf5f048d87ac2f7bf9ade113b911"
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
+    },
+    "express-graphql/express-graphql.d.ts": {
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
+    },
+    "graphql/graphql.d.ts": {
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
+    },
+    "express-session/express-session.d.ts": {
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
+    },
+    "mongoose/mongoose.d.ts": {
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
+    },
+    "mongodb/mongodb.d.ts": {
+      "commit": "8691f6ce02783a756e330be4833ab3127989d5c2"
+    },
+    "bluebird/bluebird.d.ts": {
+      "commit": "6ade7275918f6e95cfeb0fdbe6ce03b5f77ea862"
     }
   }
 }
